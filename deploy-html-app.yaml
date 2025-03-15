@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: api-java
-          image: ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:imageversion  # Imagen de Docker Hub desde los secretos de GitHub Actions
+          image: guiss0/$IMAGE_NAME:imageversion  # Imagen de Docker Hub desde los secretos de GitHub Actions
           ports:
             - containerPort: 80
 ---
