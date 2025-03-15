@@ -13,8 +13,8 @@ spec:
         app: guiss0api-java
     spec:
       containers:
-        - name: api-java
-          image: guiss0/$IMAGE_NAME:imageversion  # Imagen de Docker Hub desde los secretos de GitHub Actions
+        - name: java-api
+          image: guiss0/api-java:imageversion  # Imagen de Docker Hub desde los secretos de GitHub Actions
           ports:
             - containerPort: 80
 ---
