@@ -1,4 +1,4 @@
-name: Build, Push and Deploy to Kubernetes
+name: Creacion y deploy de la api de java
 
 on:
   push:
