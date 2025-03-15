@@ -1,7 +1,7 @@
 name: Build, Push and Deploy to Kubernetes
 
 on:
-  #push:
+  push:
     branches: [main]
 
 env:
