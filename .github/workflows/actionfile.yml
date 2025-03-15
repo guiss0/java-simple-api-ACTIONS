@@ -1,0 +1,45 @@
+name: Build, Push and Deploy to Kubernetes
+
+on:
+  #push:
+    branches: [main]
+
+env:
+  IMAGE_NAME: java-api
+  REGISTRY: ${{ secrets.DOCKER_USERNAME }}
+
+jobs:
+  build-push-deploy:
+    runs-on: self-hosted  # Especificamos que debe usar el runner local
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Iniciar sesion en Docker
+        run: |
+           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      
+      - name: Creacion del Makefile
+        run: |
+          make install
+          make build
+          make test
+      
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t $REGISTRY/$IMAGE_NAME:$GITHUB_RUN_NUMBER .
+          docker push $REGISTRY/$IMAGE_NAME:$GITHUB_RUN_NUMBER
+          
+      - name: Setup kubectl and deploy
+        run: |
+          echo "${{ secrets.GOKU }}" | base64 -d > kubeconfig
+          export KUBECONFIG=$PWD/kubeconfig
+          kubectl version --client
+          kubectl get pods -A 
+      - name: Deploy to Kubernetes
+        run: |
+          echo "${{ secrets.GOKU }}"  | base64 -d > kubeconfig
+          export KUBECONFIG=$PWD/kubeconfig
+          sed -i "s/imageversion/$GITHUB_RUN_NUMBER/g" deploy-html-app.yaml 
+          cat deploy-html-app.yaml
+          kubectl apply -f deploy-html-app.yaml
