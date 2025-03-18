@@ -2,7 +2,7 @@ name: Creacion y deploy de la api de java
 
 on:
   push:
-    branches: [main]
+    branches: [test]
 
 env:
   IMAGE_NAME: java-api
